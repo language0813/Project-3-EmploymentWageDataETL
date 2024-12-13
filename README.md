@@ -30,9 +30,9 @@ We used data from the May 2023 OEWS release, which offers employment and wage es
 
 The PostgreSQL database was designed to store the cleaned OEWS data, comprising three main tables: `EmploymentWage_Table`, `State_Table`, and `Occupation_Table`. Below is an entity-relationship diagram (ERD) illustrating the relationships between the tables.
 
-![alt text](oews_erd.png)
+![Database schema](Image/oews_erd.png)
 
-## Table Descriptions
+## Database Table Descriptions
 
 1. **EmploymentWage_Table**  
    Stores employment and wage data by state and occupation levels.  
@@ -47,59 +47,66 @@ The PostgreSQL database was designed to store the cleaned OEWS data, comprising 
    Stores occupation details, including occupation codes and titles.  
    **Primary Key**: occ_code
 
+## Database Usage Examples
+
+1. Find the average wage of a "Data Scientist" in "North Carolina".
+![Query example 1](Image/query_example_1.png)
+
+2. Find the Top 5 Highest Paying occupations in a specific state in "North Carolina".
+![Query example 2](Image/query_example_2.png)
+
 ## Setup Instructions
 
-To replicate this project, follow the steps below:
+1. **Install Dependencies**  
+   Install the required Python packages:
 
-1. **Clone the Repository**  
-   ```bash
-   git clone https://github.com/hamiltonbrba/Project-3.git
-   ```
-
-2. **Install Dependencies**  
-   Install the required Python packages:  
    ```bash
    pip install pandas psycopg2 python-dotenv
    ```
 
-3. **Load the OEWS Data**  
+2. **Load the OEWS Data**  
    Download the OEWS Excel file and load it into a pandas DataFrame:
+
    ```python
    import pandas as pd
    all_oews_df = pd.read_excel("Data/all_data_M_2023.xlsx")
    ```
 
-4. **Data Cleaning and Transformation**  
+3. **Data Cleaning and Transformation**  
    Narrow the dataset to state-level data and clean it:
+
    ```python
    state_oews_df = all_oews_df[all_oews_df['AREA_TYPE'] == 2]
    clean_oews_df = state_oews_df[['AREA', 'AREA_TITLE', 'PRIM_STATE', 'OCC_CODE', ...]]
    renamed_oews_df = clean_oews_df.rename(columns={ ... })
    ```
 
-5. **Export Cleaned Data to CSV**  
+4. **Export Cleaned Data to CSV**  
    Save the cleaned data as a CSV file:
+
    ```python
    renamed_oews_df.to_csv('data/EmploymentWageData.csv', index=False)
    ```
 
-6. **Setup PostgreSQL Database**  
+5. **Setup PostgreSQL Database**  
    Ensure PostgreSQL is installed and create the database schema:
+
    ```sql
    CREATE TABLE "State_Table" (...);
    CREATE TABLE "Occupation_Table" (...);
    CREATE TABLE "EmploymentWage_Table" (...);
    ```
 
-7. **Run the ETL Process**  
+6. **Run the ETL Process**  
    Establish a connection to the PostgreSQL database and load the cleaned data.
 
-8. **Run Queries**  
-   Use SQL to query employment and wage data for analysis.
+7. **Run Queries**  
+   Use PostgreSQL to query employment and wage data for analysis.
 
-## Example Database Connection Code
+## Database Connection Code Example
 
 You can use `psycopg2` to connect to PostgreSQL:
+
 ```python
 import psycopg2
 import os
@@ -127,8 +134,6 @@ In this project, we adhered to the responsible use of publicly available data fr
 * Stephanie Ayala
 * Nebiat Beyene
 * Adebola Shellby  
-
-Roles: Data Engineering, ETL Pipeline
 
 ## Code Sources
 
